@@ -1,0 +1,87 @@
+package cmd
+
+import (
+	"fmt"
+	"github.com/fatih/camelcase"
+	"github.com/spf13/cobra"
+	"log"
+	"os"
+	"strings"
+)
+
+var cubitCmd = &cobra.Command{
+	Use:   "cubit",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		name, _ := cmd.Flags().GetString("name")
+		state, _ := cmd.Flags().GetString("state")
+		if name == "" {
+			name = "RandomCubit"
+		}
+		if state == "" {
+			name = "int"
+		}
+		generateCubit(name, state)
+	},
+}
+
+func init() {
+	generateCmd.AddCommand(cubitCmd)
+	cubitCmd.PersistentFlags().String("name", "", "Set name of the cubit")
+	cubitCmd.PersistentFlags().String("state", "", "Set name of the state")
+}
+
+func generateCubit(cubitName string, stateName string) {
+	cubitFileName := getCubitFileName(cubitName)
+	cubitFile := createFile(cubitFileName)
+	defer cubitFile.Close()
+	writeCubitCode(cubitName, stateName, cubitFile)
+	fmt.Println(fmt.Sprintf("%v has been generated", cubitName))
+}
+
+func createFile(fileName string) *os.File {
+	file, err := os.Create(fileName)
+	if err != nil {
+		log.Fatal(err.Error())
+		os.Exit(1)
+	}
+	return file
+}
+
+func getCubitFileName(cubitName string) string {
+	name := getFileName(cubitName)
+	name = name + ".dart"
+	return name
+}
+
+func getFileName(cubitName string) string {
+	verbs := camelcase.Split(cubitName)
+	for i, v := range verbs {
+		verbs[i] = strings.ToLower(v)
+	}
+	fileName := strings.Join(verbs, "_")
+
+	return fileName
+}
+
+func writeCubitCode(cubitName string, stateName string, file *os.File) {
+	_, err := file.Write([]byte(cubitCode(cubitName, stateName)))
+	if err != nil {
+		log.Fatal(err)
+		os.Exit(1)
+	}
+}
+
+func cubitCode(cubitName string, stateName string) string {
+	return fmt.Sprintf(`import 'package:flutter_bloc/flutter_bloc.dart';
+
+class %v extends Cubit<%v> {
+			void doSomething() {}
+}`, cubitName, stateName)
+}
