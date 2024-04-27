@@ -9,7 +9,7 @@ import (
 
 var generateCmd = &cobra.Command{
 	Use:   "generate",
-	Short: "Generates code with various templates",
+	Short: "Generates code with various code_templates",
 	Long:  `A code generator command for generating code for cubit, blocs`,
 }
 

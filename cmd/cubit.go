@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bb/code_templates"
 	"fmt"
 	"github.com/fatih/camelcase"
 	"github.com/spf13/cobra"
@@ -86,7 +87,7 @@ func getFileName(cubitName string) string {
 }
 
 func writeCubitCode(cubitName string, stateName string, file *os.File) {
-	_, err := file.Write([]byte(cubitCode(cubitName, stateName)))
+	_, err := file.Write([]byte(code_templates.CubitCode(cubitName, stateName)))
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
@@ -94,7 +95,7 @@ func writeCubitCode(cubitName string, stateName string, file *os.File) {
 }
 
 func writeCubitCodeWithCustomState(stateFileName string, cubitName string, stateName string, file *os.File) {
-	_, err := file.Write([]byte(cubitCodeWithCustomState(stateFileName, cubitName, stateName)))
+	_, err := file.Write([]byte(code_templates.CubitCodeWithCustomState(stateFileName, cubitName, stateName)))
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
@@ -102,35 +103,9 @@ func writeCubitCodeWithCustomState(stateFileName string, cubitName string, state
 }
 
 func writeStateCode(stateName string, cubitFileName string, file *os.File) {
-	_, err := file.Write([]byte(stateCode(stateName, cubitFileName)))
+	_, err := file.Write([]byte(code_templates.StateCode(stateName, cubitFileName)))
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
 	}
-}
-
-func cubitCode(cubitName string, stateName string) string {
-	return fmt.Sprintf(`import 'package:flutter_bloc/flutter_bloc.dart';
-
-class %v extends Cubit<%v> {
-			void doSomething() {}
-}`, cubitName, stateName)
-}
-
-func cubitCodeWithCustomState(stateFileName string, cubitName string, stateName string) string {
-	return fmt.Sprintf(`import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
-
-part '%v';
-
-class %v extends Cubit<%v> {
-			void doSomething() {}
-}`, stateFileName, cubitName, stateName)
-}
-
-func stateCode(stateName string, cubitFileName string) string {
-	return fmt.Sprintf(`part of '%v';
-
-sealed class %v extends Equatable {}
-`, cubitFileName, stateName)
 }
