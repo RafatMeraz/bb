@@ -56,9 +56,7 @@ func createCubitWithCustomState(cubitName string, stateName string) {
 
 func createState(stateName string, cubitName string) {
 	cubitFileName := utility.CreateFileName(cubitName)
-	cmd := &cobra.Command{}
-	cmd.Flags().String("partOf", cubitFileName, "")
-	stateCmd.Run(cmd, []string{stateName})
+	callStateCmd(stateName, cubitFileName)
 }
 
 func init() {
