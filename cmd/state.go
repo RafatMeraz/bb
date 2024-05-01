@@ -42,8 +42,16 @@ func writeCodeWithoutPartOf(stateName string) {
 	fmt.Println(message)
 }
 
+func callStateCmd(stateName string, partOfFileName string) {
+	cmd := &cobra.Command{}
+	if partOfFileName != "" {
+		cmd.Flags().String("partOf", partOfFileName, "")
+	}
+	stateCmd.Run(cmd, []string{stateName})
+}
+
 func init() {
 	generateCmd.AddCommand(stateCmd)
 	// FLAGS
-	stateCmd.PersistentFlags().String("partOf", "", "Define the file name if state is part of that cubit/bloc")
+	stateCmd.PersistentFlags().StringP("partOf", "p", "", "Define the file name if state is part of that cubit/bloc")
 }
