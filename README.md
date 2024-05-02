@@ -1,6 +1,14 @@
 # bb - BoroBhai
 ### CLI tool for generate cubit/bloc and other stuffs
 
+## Install
+To install ``bb`` in your mac, use these commands.
+
+```
+brew tap RafatMeraz/bb
+brew install bb
+```
+
 ## Generate
 
 ### cubit
