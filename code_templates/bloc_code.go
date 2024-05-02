@@ -5,8 +5,8 @@ import "fmt"
 const blocCode = `import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-part "%v"
-part "%v"
+part "%v";
+part "%v";
 
 class %v extends Bloc<%v, %v> {
   %v() : super(%v()) {}
