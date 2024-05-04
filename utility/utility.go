@@ -1,6 +1,7 @@
 package utility
 
 import (
+	"errors"
 	"github.com/fatih/camelcase"
 	"log"
 	"os"
@@ -23,6 +24,30 @@ func WriteCodeOnFile(file *os.File, code string) {
 		log.Fatal(err)
 		os.Exit(1)
 	}
+}
+
+func GetCurrentWorkingDir() (string, error) {
+	pwd, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	return pwd, nil
+}
+
+func ChangeDirectory(directory string) error {
+	err := os.Chdir(directory)
+	if err != nil {
+		return errors.New("failed to change directory")
+	}
+	return nil
+}
+
+func CreateDirectory(directoryName string) error {
+	err := os.Mkdir(directoryName, os.ModePerm)
+	if err != nil {
+		return errors.New("failed to create new directory")
+	}
+	return nil
 }
 
 func CreateFile(fileName string) *os.File {
