@@ -26,6 +26,11 @@ func WriteCodeOnFile(file *os.File, code string) {
 	}
 }
 
+func CreateInitialStateName(stateName string) string {
+	res := strings.Split(stateName, "State")
+	return res[0] + "InitialState"
+}
+
 func GetCurrentWorkingDir() (string, error) {
 	pwd, err := os.Getwd()
 	if err != nil {
